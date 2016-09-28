@@ -10,23 +10,17 @@ public class App
 
     public static void main( String[] args )
     {
-        //Searcher searcher = createSearcher(args[0]);
-        Searcher searcher = new LinearSearcher();
-        setup(searcher);
-        //int target = Integer.parseInt(args[1]);
-        int target = 9999999;
-        search(searcher, target);
-    }
+        Searcher linearSearcher = new LinearSearcher();
+        System.out.println(linearSearcher.getClass().getSimpleName());
+        setup(linearSearcher);
+        search(linearSearcher, 9999999);
+        // set null for escape OOM.
+        linearSearcher = null;
 
-    private static Searcher createSearcher(String searcherName) throws IllegalAccessException, InstantiationException {
-        Class clazz;
-        String className = basePackage + "." + searcherName;
-        try {
-            clazz = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException(className + " is not exist.");
-        }
-        return (Searcher) clazz.newInstance();
+        Searcher binarySearcher = new BinarySearcher();
+        System.out.println(binarySearcher.getClass().getSimpleName());
+        setup(binarySearcher);
+        search(binarySearcher, 9999999);
     }
 
     private static void search(Searcher searcher, int key) {
@@ -44,8 +38,10 @@ public class App
     }
 
     private static void setup(Searcher searcher) {
+        System.out.println("setup start.");
         for (int i = 0; i < 10000000; i++) {
             searcher.add(i, String.valueOf(i));
         }
+        System.out.println("setup end.");
     }
 }
